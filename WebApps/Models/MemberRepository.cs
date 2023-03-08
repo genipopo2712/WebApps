@@ -9,6 +9,12 @@ namespace WebApps.Models
         {
         }
 
+        public int AddMemberIfNotExists(Member obj)
+        {
+            return connection.Execute("AddMemberIfNotExists", obj ,  commandType: CommandType.StoredProcedure);
+
+        }
+
         public Member GetMemberById(string id)
         {
             string sql = "SELECT Avatar, MemberId, Username, Fullname, Email, Gender FROM Member WHERE MemberId = @Id";
@@ -27,6 +33,7 @@ namespace WebApps.Models
                 Pwd = Helper.Hash(obj.Pwd)
             }) ;
         }
+
 
     }
 }

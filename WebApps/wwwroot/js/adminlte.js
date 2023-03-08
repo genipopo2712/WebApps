@@ -2825,7 +2825,11 @@
 
       var $toggleSelector = this._element;
       $toggleSelector.find('input:checkbox:checked').parents('li').toggleClass(CLASS_NAME_TODO_LIST_DONE);
-      $toggleSelector.on('change', 'input:checkbox', function (event) {
+        $toggleSelector.on('change', 'input:checkbox', function (event) {
+            var wid = $(event.target).val();
+            $.post('/dashboard/work/editchecked', { id: wid }, (d) => {
+                console.log(d);
+            });
         _this.toggle($__default["default"](event.target));
       });
     } // Static
@@ -2858,8 +2862,10 @@
    */
 
 
-  $__default["default"](window).on('load', function () {
-    TodoList._jQueryInterface.call($__default["default"](SELECTOR_DATA_TOGGLE));
+    $__default["default"](window).on('load', function () {
+        loadWorks(() => {
+            TodoList._jQueryInterface.call($__default["default"](SELECTOR_DATA_TOGGLE));
+        });    
   });
   /**
    * jQuery API

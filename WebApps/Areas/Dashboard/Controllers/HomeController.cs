@@ -8,16 +8,18 @@ namespace WebApps.Areas.Dashboard.Controllers
 {
     [Area("dashboard")]
     [Authorize] //thêm chức năng authorize đăng nhập; BẮT BUỘC ĐĂNG NHẬP ĐỂ VÀO ĐƯỢC TRANG NÀY ( TRONG BÀI LÀ TRANG DASHBOARD)
-    public class HomeController : Controller
+    public class HomeController : Controller //CountController
     {
         IDistributedCache cache;
         IStatisticRepository repository;
         IMessageRepository messageRepository;
-        public HomeController(IStatisticRepository repository, IDistributedCache cache, IMessageRepository messageRepository)
+        IContactRepository contactRepository;
+        public HomeController(IStatisticRepository repository, IDistributedCache cache, IMessageRepository messageRepository, IContactRepository contactRepository)//:base(contactRepository)
         {
             this.cache = cache;
             this.repository = repository;
             this.messageRepository = messageRepository;
+            this.contactRepository = contactRepository;
         }
         [HttpPost]
         public IActionResult Monthly(int year)
@@ -36,8 +38,16 @@ namespace WebApps.Areas.Dashboard.Controllers
             return Redirect("/dashboard");
 
         }
+        [ServiceFilter(typeof(ContactFilter))]
         public IActionResult Index()
         {
+            //string? memberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //if (memberId != null)
+            //{
+            //    //ViewBag.contactsNew = contactRepository.CountContactsWithNew(memberId);
+            //    //LoadCountNew(memberId);
+
+            //}
             ViewBag.messages = messageRepository.GetMessages();
             string? countQuestions = cache.GetString("CountQuestions");
             if (string.IsNullOrEmpty(countQuestions))

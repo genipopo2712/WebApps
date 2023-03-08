@@ -4,5 +4,6 @@
     {
         Member Login(LoginModel obj);
         Member GetMemberById(string id);
+        int AddMemberIfNotExists(Member obj);
     }
 }

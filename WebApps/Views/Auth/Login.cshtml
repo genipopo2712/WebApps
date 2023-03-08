@@ -1,22 +1,75 @@
 ﻿@using WebApps.Models;
 @model LoginModel
-
+@{
+    Layout = "_LayoutAuth";
+}
 <div asp-validation-summary="All"></div>
-<form method="post">
-    <div>
-        <label>Username or Email</label>
-        <input type="text" asp-for="Usr"/>
+<div class="login-box">
+    <div class="login-logo">
+        <a href="/"><b>Stack</b>Overflow</a>
     </div>
-    <div>
-    <label>Password</label>
-    <input type="password" asp-for="Pwd" />
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-bod y">
+            <p class="login-box-msg">Sign in to start your session</p>
+            <form method="post">
+                <div class="input-group mb-3">
+                    <input type="text" asp-for="Usr" class="form-control" placeholder="Email or UserName">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" asp-for="Pwd" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input asp-for="Rem" type="checkbox" id="remember">
+                            <label for="Rem">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+            <div class="social-auth-links text-center mb-3">
+                <p>- OR -</p>
+                <a href="/auth/signinfacebook" class="btn btn-block btn-primary">
+                    <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+                </a>
+                <a href="/auth/signingoogle" class="btn btn-block btn-danger">
+                    <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                </a>
+            </div>
+            <!-- /.social-auth-links -->
+
+            <p class="mb-1">
+                <a href="/auth/forgotpassword">I forgot my password</a>
+            </p>
+            <p class="mb-0">
+                <a href="/auth/register" class="text-center">Register a new membership</a>
+            </p>
+        </div>
+        <!-- /.login-card-body -->
     </div>
-    <div>
-    <label>Remember</label>
-    <input type="checkbox" asp-for="Rem" />
-    </div>
-    <button>Login</button>
-</form>
+</div>
+<!-- /.login-box -->
+
+
 
 
 

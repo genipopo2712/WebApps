@@ -359,8 +359,8 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <ul class="todo-list" data-widget="todo-list">
-                  <li>
+                <ul id="todoList" class="todo-list" data-widget="todo-list">
+                 @* <li>
                     <!-- drag handle -->
                     <span class="handle">
                       <i class="fas fa-ellipsis-v"></i>
@@ -460,12 +460,12 @@
                       <i class="fas fa-edit"></i>
                       <i class="fas fa-trash-o"></i>
                     </div>
-                  </li>
+                  </li>*@
                 </ul>
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-                <button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
+                <button id="addItem" type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
               </div>
             </div>
             <!-- /.card -->
@@ -615,11 +615,34 @@
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
+    <div id="modWork" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <form name="frmWork" method="post" action="/dashboard/work/add" class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                    <input class="form-control" type="text" name="name" placeholder="Input Work Name"/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>        
+      </div>
+    </div>
     <!-- /.content -->
 
 <!--real time chat-->
 @section Script{ @*this section Script is work with RenderSection in layout this mean this Script is place put RenderSection in Layout*@
     <script src="/js/signalr.min.js"></script>
+    <script src="/js/Work.js"></script>
     <script type="text/javascript">
         const cn = new signalR.HubConnectionBuilder().withUrl("/chathub").build(); /*build connection*/
         //console.log(cn);
@@ -628,6 +651,39 @@
         }).catch((e)=>{
             console.error(e);
         });
+        cn.on('reloadWork',()=>{
+            $(todoList).empty();
+            loadWorks();
+        });
+        cn.on('countContacts', ()=>{
+            $.post('/dashboard/contact/countcontactsnew', (d) =>{
+                $(contactTotal).html(`
+                    <i class="fas fa-file mr-2"></i> ${d.total} new contacts
+                    <span class="float-right text-muted text-sm">${d.ago} ${d.timeName}</span>
+                `);
+            });
+            
+        });
+        cn.on('addMember', (o)=>{
+            $(callmember).append(`
+                <a href="#" class="dropdown-item">
+                <!-- Message Start -->
+                <div class="media">
+                <img src="/img/${o.avatar}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                <div class="media-body">
+                <h3 class="dropdown-item-title">
+                    ${o.fullname}
+                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Add member ${o.username}</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                </div>
+                </div>
+                <!-- Message End -->
+                </a>
+            `);
+        });
+            
         cn.on('recMsg', (u,o)=>{ 
             $(rsChat).append(`
                 <div class="direct-chat-msg${o.memberId == '@User.FindFirstValue(ClaimTypes.NameIdentifier)' ? " right": ""}"> 
@@ -644,14 +700,83 @@
                 <!-- /.direct-chat-text -->
             </div>
             `);
-        })
+        });
         
         $(frm).submit(function (ev){  
             ev.preventDefault();
             cn.invoke('Send','@User.FindFirstValue(ClaimTypes.NameIdentifier)', $(frm['content']).val());
         });
-        @*catch event on Button => if we catch even on button => excutive when click to button 
-          catch event on Form => excutive when we press Enter on keyboard or click Button*@
-        @*line 633 code to verify if chat should be show on left or right base on user who send this message*@
+        //catch event on Button => if we catch even on button => excutive when click to button 
+        //catch event on Form => excutive when we press Enter on keyboard or click Button
+        //line 633 code to verify if chat should be show on left or right base on user who send this message
+        //function loadWorks(){
+        //    $.post('/dashboard/work', (d) => {
+        //        $(todoList).html(null);
+        //        for (var i in d) {
+        //            $(todoList).append(`
+        //                            <li${d[i].checked ? ' class="done"' : ''}>
+        //                        <!-- drag handle -->
+        //                        <span class="handle">
+        //                            <i class="fas fa-ellipsis-v"></i>
+        //                            <i class="fas fa-ellipsis-v"></i>
+        //                        </span>
+        //                        <!-- checkbox -->
+        //                        <div  class="icheck-primary d-inline ml-2">
+        //                                    <input type="checkbox" name="todo${d[i].workId}" value="${d[i].workId}" id="todoCheck${d[i].workId}" ${d[i].checked ? 'checked' : ''}>
+        //                                            <label for="todoCheck${d[i].workId}"></label>
+        //                        </div>
+        //                        <!-- todo text -->
+        //                        <span class="text">${d[i].workName}</span>
+        //                        <!-- Emphasis label -->
+        //                        <small class="badge ${d[i].className}"><i class="far fa-clock"></i> ${d[i].ago} ${d[i].timeName}</small>
+        //                        <!-- General tools such as edit or delete-->
+        //                        <div class="tools">
+        //                            <i class="fas fa-edit"></i>
+        //                            <i class="fas fa-trash-o"></i>
+        //                        </div>
+        //                    </li>
+        //                `)
+        //        }
+        //    })
+        //}
+        //loadWorks();      
+        $(addItem).click(function(){
+            $(modWork).modal('show');
+        });
+        $(frmWork).submit(function(ev){
+            ev.preventDefault();
+            $.post('dashboard/work/add', {workName: $(frmWork['name']).val()},(d)=>{
+                console.log(d);
+                $(modWork).modal('hide');
+                //loadWorks();
+            })
+        });
+        //$.post('/dashboard/work', (d)=>{
+        //    for (var i in d){
+        //        $(todoList).append(`
+        //                    <li${d[i].checked ? ' class="done"' : ''}>
+        //                <!-- drag handle -->
+        //                <span class="handle">
+        //                    <i class="fas fa-ellipsis-v"></i>
+        //                    <i class="fas fa-ellipsis-v"></i>
+        //                </span>
+        //                <!-- checkbox -->
+        //                <div  class="icheck-primary d-inline ml-2">
+        //                            <input type="checkbox" name="todo${d[i].workId}" value="${d[i].workId}" id="todoCheck${d[i].workId}" ${d[i].checked ? 'checked' : ''}>
+        //                                    <label for="todoCheck${d[i].workId}"></label>
+        //                </div>
+        //                <!-- todo text -->
+        //                <span class="text">${d[i].workName}</span>
+        //                <!-- Emphasis label -->
+        //                <small class="badge ${d[i].className}"><i class="far fa-clock"></i> ${d[i].ago} ${d[i].timeName}</small>
+        //                <!-- General tools such as edit or delete-->
+        //                <div class="tools">
+        //                    <i class="fas fa-edit"></i>
+        //                    <i class="fas fa-trash-o"></i>  
+        //                </div>
+        //            </li>
+        //        `)
+        //    }
+        //})
     </script>
 }

@@ -9,14 +9,26 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 {
     p.ExpireTimeSpan = TimeSpan.FromDays(32); // remember user and password
     p.LoginPath = "/auth/login"; //link to page login if didn't login yet
-    p.LogoutPath= "/auth/logout";
+    p.LogoutPath = "/auth/logout";
     //p.AccessDeniedPath= "/auth/denied";
+}).AddFacebook(opt =>
+{
+    opt.ClientId = "1369697397155340";
+    opt.ClientSecret = "d012a05d1009916928c4961ed3c6d281";
+}).AddGoogle(opt =>
+{
+    opt.ClientId = "409014410886-ac8rv0me2tpfvdouo4d9h6pd57sms7c3.apps.googleusercontent.com";
+    opt.ClientSecret = "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";
 });
 
+
+builder.Services.AddTransient<ContactFilter>();
 builder.Services.AddTransient<IDbConnection, SqlConnection>(p => new SqlConnection(builder.Configuration.GetConnectionString("StackOverflow")));
 builder.Services.AddTransient<IStatisticRepository, StatisticRepository>();
 builder.Services.AddTransient<IMemberRepository, MemberRepository>();
 builder.Services.AddTransient<IMessageRepository, MessageRepository>();
+builder.Services.AddTransient<IWorkRepository, WorkRepository>();
+builder.Services.AddTransient<IContactRepository, ContactRepository>();
 
 builder.Services.AddDistributedSqlServerCache(p =>
 {
