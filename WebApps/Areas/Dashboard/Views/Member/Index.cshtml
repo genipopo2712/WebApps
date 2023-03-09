@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Member>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Member</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Member</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<div class="container-fluid">
+    <table class="table table-bordered">
+        <thread class="table-dark">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Fullname</th>
+                <th>Gender</th>
+                <th>Avatar</th>
+                <th>Roles</th>
+            </tr>            
+        </thread>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Username</td>
+                    <td>@item.Email</td>
+                    <td>@item.Fullname</td>
+                    <td>@item.Gender</td>
+                    <td>
+                        <img src="/img/@item.Avatar" class="rounded-circle">
+                    </td>
+                    <td>
+                        <a href="/dashboard/member/roles/@item.MemberId">Roles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

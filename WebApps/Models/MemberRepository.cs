@@ -24,6 +24,11 @@ namespace WebApps.Models
             });
         }
 
+        public IEnumerable<Member> GetMembers()
+        {
+            return connection.Query<Member>("SELECT MemberId, Username, Fullname, Email, Gender, Avatar FROM Member");
+        }
+
         public Member Login(LoginModel obj)
         {
             string sql = "SELECT Avatar, MemberId, Username, Fullname, Email, Gender FROM Member WHERE Username = @Usr AND Password = @Pwd";

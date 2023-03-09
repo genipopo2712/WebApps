@@ -29,6 +29,8 @@ builder.Services.AddTransient<IMemberRepository, MemberRepository>();
 builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 builder.Services.AddTransient<IWorkRepository, WorkRepository>();
 builder.Services.AddTransient<IContactRepository, ContactRepository>();
+builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddTransient<IMemberInRoleRepository, MemberInRoleRepository>();
 
 builder.Services.AddDistributedSqlServerCache(p =>
 {

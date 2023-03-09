@@ -1,0 +1,71 @@
+﻿@model Member
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Detail Member</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard/member">Member</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">@Model.Fullname</div>
+        </div>
+        <div class="card-body">
+            <table>
+                <tr><th>Email</th><td>@Model.Email</td></tr>
+                <tr><th>Username</th><td>@Model.Username</td></tr>
+                <tr>
+                    <th>Avatar</th>
+                    <td>
+                        <img src="/img/@Model.Avatar" class="rounded-circle" />
+                    </td>
+                </tr>
+                @*<tr><th>Gender</th><td>@(Model.Gender ? "Male" : "Female")</td></tr>*@
+                <tr><th>Gender</th><td>@Model.Gender</td></tr>
+            </table>
+            <table class="table table-bordered">
+                <thead>
+                    <tr><th>Role</th><td>Checked</td></tr>
+                </thead>
+                <tbody>
+                    @foreach (RoleChecked item in ViewBag.roles)
+                    {
+                        <tr>
+                            <td>@item.RoleName</td>
+                            <td>
+                                <input type="checkbox" @(item.Checked ? "checked" : "") name="chk" value="@item.RoleId" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Script{
+    <script>
+        $('input[name="chk"]').change(function(){
+            //console.log(this);
+            var rId = $(this).val();
+            $.post('/dashboard/member/saverole', {roleId: rId, memberId: '@Model.MemberId'}, (d)=>{
+                console.log(d);
+            });
+        });
+        //$('input[name="chk"]').change(()=>{
+        //    console.log(this);
+        //}); ////this call function doesnt work
+    </script>
+}

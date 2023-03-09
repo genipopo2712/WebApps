@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Member>
+<div class="container-fluid">
+    <table class="table table-bordered">
+        <thread class="table-dark">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Fullname</th>
+                <th>Gender</th>
+                <th>Avatar</th>
+                <th>Roles</th>
+            </tr>            
+        </thread>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Username</td>
+                    <td>@item.Email</td>
+                    <td>@item.Fullname</td>
+                    <td>@item.Gender</td>
+                    <td>
+                        <img src="/img/@item.Avatar" class="rounded-circle">
+                    </td>
+                    <td>
+                        <a href="/dash/board/member/roles/@item.MemberId">Roles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

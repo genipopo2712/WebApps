@@ -47,7 +47,7 @@ namespace WebApps.Controllers
                     new Claim(ClaimTypes.Email, member.Email),
                     new Claim(ClaimTypes.NameIdentifier, member.MemberId),
                     new Claim(ClaimTypes.GivenName, member.Fullname),
-                    new Claim("Gender", member.Gender ? "Male" : "Female")
+                    new Claim("Gender", member.Gender.ToString())
                 };
                 ClaimsIdentity identity= new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 HttpContext.SignInAsync(new ClaimsPrincipal(identity), new AuthenticationProperties
@@ -75,7 +75,8 @@ namespace WebApps.Controllers
             {
                 //save password
                 //hash sql vs hash c# compare ?
-                Member obj = new Member { Gender = true, Avatar = "no-image.jpg", Password = "123" };
+                //Member obj = new Member { Gender = true, Avatar = "no-image.jpg", Password = "123" };
+                Member obj = new Member { Gender = Gender.Male, Avatar = "no-image.jpg", Password = "123" };
                 foreach (Claim claim in claims)
                 {
                     switch (claim.Type)
@@ -93,7 +94,7 @@ namespace WebApps.Controllers
                         case ClaimTypes.Surname:
                             if (claim.Value.ToLower().Contains("thị"))
                             {
-                                obj.Gender = false;
+                                obj.Gender = Gender.Female;
                             }
                             break;
                     }

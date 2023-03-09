@@ -9,6 +9,6 @@
         public string Fullname { get; set; }
         public string Avatar { get; set; }
 
-        public bool Gender { get; set; }
+        public Gender Gender { get; set; }
     }
 }
